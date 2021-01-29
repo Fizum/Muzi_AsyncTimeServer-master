@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Muzi_SocketAsyncLib
@@ -58,6 +59,7 @@ namespace Muzi_SocketAsyncLib
                 mClient.Add(client);
                 Debug.WriteLine($"Client connessi: {mClient.Count}. Client connesso: {client.Client.RemoteEndPoint}");
 
+                SendToAll();
                 RiceviMessaggi(client);
             }
 
@@ -65,7 +67,6 @@ namespace Muzi_SocketAsyncLib
         }
         public async void RiceviMessaggi(TcpClient client)
         {
-
             NetworkStream stream = null;
             StreamReader reader = null;
             try
@@ -85,7 +86,7 @@ namespace Muzi_SocketAsyncLib
                         Debug.WriteLine("Client disconnesso.");
                         break;
                     }
-                    string recvMessage = new string(buff);
+                    string recvMessage = new string(buff, 0, nBytes);
                     Debug.WriteLine("Returned bytes: {0}. Messaggio: {1}", nBytes, recvMessage);
 
                     Rispondi(client, recvMessage);
@@ -101,17 +102,16 @@ namespace Muzi_SocketAsyncLib
 
         private void Rispondi(TcpClient client, string msg)
         {
-            string risposta;
+            string risposta = "";
 
-            if (msg == "time")
-                risposta = DateTime.Now.ToShortTimeString();
-            else if (msg == "data")
-                risposta = DateTime.Now.ToShortDateString();
+            if (msg.ToLower() == "time")
+                risposta = DateTime.Now.ToShortTimeString() + "\n";
+            else if (msg.ToLower() == "date")
+                risposta = DateTime.Now.ToShortDateString() + "\n";
             else
-                risposta = "non ho capito, prova a ripetere";
+                risposta = "non ho capito, prova a ripetere" + "\n";
 
-            risposta += "...........";
-            SendToAll(risposta);
+            SendToOne(client, risposta);
         }
 
         private void RemoveClient(TcpClient client)
@@ -122,7 +122,29 @@ namespace Muzi_SocketAsyncLib
             }
         }
 
-        public void SendToAll(string messaggio)
+        public void SendToAll()
+        {
+            try
+            {
+                //Random rnd = new Random();
+                //rnd.Next(5, 6);
+                //Thread.Sleep(Convert.ToInt32(rnd) * 1000);
+
+                //byte[] buff = Encoding.ASCII.GetBytes($"sono {Convert.ToInt32(rnd)} secondi che aspetto");
+
+                Thread.Sleep(5000);
+                //byte[] buff = Encoding.ASCII.GetBytes($"ciao");
+                byte[] buff = Encoding.ASCII.GetBytes($"sono {5} secondi che aspetto un messaggio \n");
+                foreach (TcpClient item in mClient)
+                    item.GetStream().WriteAsync(buff, 0, buff.Length);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Errore: {ex.Message}");
+            }
+        }
+        
+        public void SendToOne(TcpClient client, string messaggio)
         {
             try
             {
@@ -130,8 +152,7 @@ namespace Muzi_SocketAsyncLib
                     return;
 
                 byte[] buff = Encoding.ASCII.GetBytes(messaggio);
-                foreach (TcpClient item in mClient)
-                    item.GetStream().WriteAsync(buff, 0, buff.Length);
+                client.GetStream().WriteAsync(buff, 0, buff.Length);
             }
             catch (Exception ex)
             {

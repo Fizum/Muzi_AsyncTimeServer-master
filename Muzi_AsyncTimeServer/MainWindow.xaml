@@ -5,18 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Muzi_AsyncTimeServer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="500">
+        Title="MainWindow" Height="200" Width="366.667">
     <Grid>
         <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                <GradientStop Color="White" Offset="1"/>
-                <GradientStop Color="#FFF90E0E"/>
-            </LinearGradientBrush>
+            <ImageBrush ImageSource="background.jpg"/>
         </Grid.Background>
-        <Button x:Name="Btn_Ascolta" Content="Ascolta" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" Height="50" Click="Btn_Ascolta_Click"/>
-        <TextBox x:Name="Txt_Messaggio" HorizontalAlignment="Left" Height="56" Margin="257,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
-        <Button x:Name="Btn_Disconnetti" Content="Disconnetti" HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" Width="150" Height="50" Click="Btn_Disconnetti_Click"/>
-        <Button x:Name="Btn_Invia" Content="Invia" HorizontalAlignment="Left" Margin="257,71,0,0" VerticalAlignment="Top" Width="150" Height="50" Click="Btn_Invia_Click"/>
+        <Button x:Name="Btn_Ascolta" Content="Ascolta" HorizontalAlignment="Left" Margin="219,80,0,0" VerticalAlignment="Top" Width="130" Height="35" Click="Btn_Ascolta_Click"/>
+        <Button x:Name="Btn_Disconnetti" Content="Disconnetti" HorizontalAlignment="Left" Margin="219,125,0,0" VerticalAlignment="Top" Width="130" Height="35" Click="Btn_Disconnetti_Click"/>
+        <Label Content="COMANDI AMMISSIBILI:" Height="41" Margin="219,10,0,0" VerticalAlignment="Top" Width="130" Background="{x:Null}" Foreground="#FFBDBCBC" FontSize="11" HorizontalAlignment="Left"/>
+        <Label Content="-Date             -Time" HorizontalAlignment="Left" Height="42" Margin="219,33,0,0" VerticalAlignment="Top" Width="130" Foreground="Red"/>
 
     </Grid>
 </Window>

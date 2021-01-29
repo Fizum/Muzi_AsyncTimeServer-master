@@ -37,10 +37,5 @@ namespace Muzi_AsyncTimeServer
         {
             mServer.ChiudiConnessione();
         }
-
-        private void Btn_Invia_Click(object sender, RoutedEventArgs e)
-        {
-            mServer.SendToAll(Txt_Messaggio.Text);
-        }
     }
 }
