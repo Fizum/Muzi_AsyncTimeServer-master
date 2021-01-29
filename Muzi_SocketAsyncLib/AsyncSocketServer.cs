@@ -27,7 +27,6 @@ namespace Muzi_SocketAsyncLib
         // Mette in ascolto il server
         public async void InizioAscolto(IPAddress ipaddr = null, int port = 23000)
         {
-            int count = 0;
             //faccio dei controlli su IPAddress e sulle porte
             if (ipaddr == null)
             {
@@ -48,8 +47,7 @@ namespace Muzi_SocketAsyncLib
             mServer = new TcpListener(mIP, mPort);
 
             //avviare il server
-            if (count == 0)
-                mServer.Start();
+            mServer.Start();
 
             continua = true;
             while (continua)
@@ -59,11 +57,8 @@ namespace Muzi_SocketAsyncLib
                 mClient.Add(client);
                 Debug.WriteLine($"Client connessi: {mClient.Count}. Client connesso: {client.Client.RemoteEndPoint}");
 
-                SendToAll();
                 RiceviMessaggi(client);
             }
-
-            count++;
         }
         public async void RiceviMessaggi(TcpClient client)
         {
@@ -97,7 +92,6 @@ namespace Muzi_SocketAsyncLib
             {
                 Debug.WriteLine(ex.Message);
             }
-
         }
 
         private void Rispondi(TcpClient client, string msg)
@@ -126,15 +120,8 @@ namespace Muzi_SocketAsyncLib
         {
             try
             {
-                //Random rnd = new Random();
-                //rnd.Next(5, 6);
-                //Thread.Sleep(Convert.ToInt32(rnd) * 1000);
-
-                //byte[] buff = Encoding.ASCII.GetBytes($"sono {Convert.ToInt32(rnd)} secondi che aspetto");
-
-                Thread.Sleep(5000);
-                //byte[] buff = Encoding.ASCII.GetBytes($"ciao");
-                byte[] buff = Encoding.ASCII.GetBytes($"sono {5} secondi che aspetto un messaggio \n");
+                Thread.Sleep(10000);
+                byte[] buff = Encoding.ASCII.GetBytes($"{DateTime.Now} \n");
                 foreach (TcpClient item in mClient)
                     item.GetStream().WriteAsync(buff, 0, buff.Length);
             }
@@ -143,6 +130,7 @@ namespace Muzi_SocketAsyncLib
                 Console.WriteLine($"Errore: {ex.Message}");
             }
         }
+
         
         public void SendToOne(TcpClient client, string messaggio)
         {
